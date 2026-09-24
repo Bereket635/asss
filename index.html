@@ -1,0 +1,2015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abomsa Senior Secondary School Access Portal</title>
+<style>
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #f5f7fa;
+    color: #1a202c;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button {
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+  }
+
+  input {
+    font-family: inherit;
+  }
+
+  h1, h2, h3, h4, h5, h6, p { margin: 0; }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --navy: #000C2C;
+    --blue: #3B64AF;
+    --blue-light: #eaf0fb;
+    --blue-dark: #2a4a85;
+    --white: #fff;
+    --bg: #f5f7fa;
+    --border: #e2e8f0;
+    --text: #1a202c;
+    --muted: #64748b;
+    --green: #16a34a;
+    --green-bg: #e8f8ee;
+    --amber: #d97706;
+    --amber-bg: #fef3c7;
+    --red: #dc2626;
+    --red-bg: #fdeaea;
+    --radius: 8px;
+  }
+
+  .login {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--navy), #0a1a3a, var(--navy));
+    padding: 20px;
+  }
+
+  .login.hidden {
+    display: none;
+  }
+
+  .login-box {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 36px 32px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 20px 60px rgba(0,0,0, .3);
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+
+  .login-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 26px;
+  }
+
+  .login-logo .mark {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--blue), var(--navy));
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .login-logo strong {
+    font-size: 1rem;
+  }
+  .login-logo small {
+    display: block;
+    font-size: .7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .login-box h2 {
+    font-size: 1.2rem;
+    margin-bottom: 4px;
+  }
+
+  .form-group {
+    margin-bottom: 14px;
+  }
+  .form-group label{
+    display: block;
+    font-size: .8rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+  .form-group input {
+    width: 100%;
+    padding: 10px 13px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: .9rem;
+    background: #fafbfc;
+    transition: border-color .2s;
+  }
+  .form-group input:focus {
+    outline: none;
+    border-color: var(--blue);
+    background: #fff;
+  }
+  .form-group input::placeholder {
+    color: #a0aec0;
+  }
+
+  .btn-login {
+    width: 100%;
+    padding: 11px;
+    border-radius: 8px;
+    background: var(--blue);
+    color: #fff;
+    font-size: .92rem;
+    font-weight: 600;
+    transition: background .2s, transform .1s;
+  }
+  .btn-login:hover {
+    background: var(--blue-dark);
+  }
+  .btn-login:active {
+    transform: scale(.98);
+  }
+
+
+  .form-group select {
+    width: 100%;
+    padding: 10px 13px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: .9rem;
+    font-family: inherit;
+    background: #fafbfc;
+    color: var(--text);
+    transition: border-color .2s;
+  }
+  .form-group select:focus {
+    outline: none;
+    border-color: var(--blue);
+    background: #fff;
+  }
+
+  .subject-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .subject-list li {
+    padding: 5px 10px;
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--blue-dark);
+    background: var(--blue-light);
+    border-radius: 20px;
+  }
+
+  .switch-line {
+    margin-top: 18px;
+    text-align: center;
+    font-size: .82rem;
+    color: var(--muted);
+  }
+  .switch-line a {
+    color: var(--blue);
+    font-weight: 600;
+    margin-left: 4px;
+  }
+  .switch-line a:hover { text-decoration: underline; }
+
+  .error-box {
+    display: none;
+    margin-bottom: 14px;
+    padding: 9px 12px;
+    font-size: .8rem;
+    color: var(--red);
+    background: var(--red-bg);
+    border-radius: 8px;
+  }
+
+  .app {
+    display: none;
+  }
+  .app.active {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 240px;
+    background: var(--navy);
+    color: #94a9c0;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    transition: transform .3s ease;
+  }
+
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 16px;
+    border-bottom: 1px solid rgba(255,255,255, .07);
+    flex-shrink: 0;
+  }
+
+  .sidebar-brand .mark {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, var(--blue), #1a3a6e);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-weight: 800;
+    font-size: .95rem;
+    flex-shrink: 0;
+  }
+  .sidebar-brand strong {
+    display: block;
+    font-size: .88rem;
+    color: #fff;
+  }
+  .sidebar-brand small {
+    font-size: .65rem;
+    color: #4a6075;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 8px;
+  }
+  .nav-label {
+    font-size: .64rem;
+    font-weight: 700;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+    color: #4a6075;
+    padding: 14px 10px 5px;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    border-radius: 7px;
+    font-size: .84rem;
+    font-weight: 500;
+    color: #94a9c0;
+    cursor: pointer;
+    transition: all .15s;
+    margin-bottom: 1px;
+  }
+  .nav-item:hover {
+    background: #1a2d41;
+    color: #e2e8f0;
+  }
+  .nav-item.active {
+    background: #1e3a56;
+    color: #fff;
+    font-weight: 600;
+  }
+  .nav-item .icon {
+    width: 18px;
+    text-align: center;
+    font-size: .95rem;
+  }
+  .nav-item .badge {
+    margin-left: auto;
+    font-size: .65rem;
+    font-weight: 700;
+    background: var(--red);
+    color: #fff;
+    padding: 1px 6px;
+    border-radius: 99px;
+  }
+  .sidebar-footer {
+    padding: 12px 14px;
+    border-top: 1px solid rgba(255,255,255,.07);
+    font-size: .68rem;
+    color: #4a6075;
+    flex-shrink: 0;
+  }
+
+  .topbar {
+    position: fixed;
+    top: 0;
+    left: 240px;
+    right: 0;
+    height: 56px;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 40;
+  }
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .menu-btn {
+    display: none;
+    background: none;
+    font-size: 1.2rem;
+    color: var(--text);
+  }
+
+  .page-title {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  .page-title small {
+    display: block;
+    font-size: .7rem;
+    font-weight: 400;
+    color: var(--muted);
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 6px 12px;
+    width: 210px;
+    border: 1.5px solid transparent;
+    transition: border-color .2s;
+  }
+  .search-box:focus-within {
+    border-color: var(--blue);
+    background: #fff;
+  }
+  .search-box input {
+    border: none;
+    background: none;
+    outline: none;
+    font-size: .82rem;
+    width: 100%;
+  }
+
+  .icon-btn {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 1rem;
+    transition: border-color .15s;
+  }
+  .icon-btn:hover {
+    border-color: var(--blue);
+  }
+  .icon-btn .dot {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--red);
+    border: 2px solid #fff;
+  }
+
+  .user-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 10px 3px 3px;
+    border-radius: 99px;
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+  }
+  .user-chip:hover {
+    border-color: var(--blue);
+  }
+  .user-chip .avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--navy));
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: .7rem;
+    flex-shrink: 0;
+  }
+  .user-chip .meta {
+    line-height: 1.15;
+    text-align: left;
+  }
+  .user-chip .meta strong {
+    display: block;
+    font-size: .78rem;
+  }
+  .user-chip .meta small {
+    font-size: .65rem;
+    color: var(--muted);
+  }
+
+  .main {
+    margin-left: 240px;
+    padding: 78px 20px 48px;
+    min-height: 100vh;
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+  .card h3 {
+    font-size: .95rem;
+    margin-bottom: 4px;
+  }
+  .card p.sub {
+    font-size: .78rem;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .grid { display: grid; gap: 14px; }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+  .stat {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+  }
+  .stat .label {
+    font-size: .7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .7px;
+    font-weight: 700;
+  }
+  .stat .value {
+    font-size: 1.45rem;
+    font-weight: 800;
+    margin-top: 6px;
+    line-height: 1.1;
+  }
+  .stat .hint {
+    font-size: .72rem;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .table-wrap {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow-x: auto;
+    margin-bottom: 16px;
+  }
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .82rem;
+  }
+  .table th {
+    text-align: left;
+    padding: 10px 14px;
+    background: var(--bg);
+    color: var(--muted);
+    font-size: .68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .7px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .table td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .table tr:last-child td { border-bottom: none; }
+  .table tr:hover td { background: #fbfcfe; }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 99px;
+    font-size: .68rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .tag.green { background: var(--green-bg); color: var(--green); }
+  .tag.red   { background: var(--red-bg);   color: var(--red); }
+  .tag.amber { background: var(--amber-bg); color: var(--amber); }
+  .tag.blue  { background: var(--blue-light); color: var(--blue-dark); }
+
+  .btn {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 7px;
+    font-size: .8rem;
+    font-weight: 600;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    color: var(--text);
+    transition: all .15s;
+    white-space: nowrap;
+  }
+  .btn:hover { border-color: var(--blue); }
+  .btn.primary {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: #fff;
+  }
+  .btn.primary:hover { background: var(--blue-dark); border-color: var(--blue-dark); }
+  .btn.danger { color: var(--red); border-color: #f3cccc; }
+  .btn.danger:hover { background: var(--red-bg); }
+  .btn.sm { padding: 5px 10px; font-size: .72rem; }
+
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .between { justify-content: space-between; }
+  .end { justify-content: flex-end; }
+
+  .empty {
+    text-align: center;
+    padding: 34px 20px;
+    color: var(--muted);
+    font-size: .84rem;
+  }
+
+  .modal-back {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,12,44,.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    padding: 20px;
+  }
+  .modal-back.open { display: flex; }
+  .modal {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    width: 100%;
+    max-width: 440px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,.3);
+  }
+  .modal h3 {
+    font-size: 1rem;
+    margin-bottom: 14px;
+  }
+
+  .notice {
+    padding: 10px 13px;
+    border-radius: 8px;
+    font-size: .8rem;
+    margin-bottom: 14px;
+  }
+  .notice.amber { background: var(--amber-bg); color: #92400e; }
+  .notice.green { background: var(--green-bg); color: var(--green); }
+  .notice.red   { background: var(--red-bg);   color: var(--red); }
+
+  .muted { color: var(--muted); }
+  .nowrap { white-space: nowrap; }
+  .mono { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .78rem; }
+
+  @media (max-width: 1000px) {
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 860px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .topbar { left: 0; }
+    .main { margin-left: 0; padding: 74px 14px 40px; }
+    .menu-btn { display: block; }
+    .search-box { display: none; }
+    .user-chip .meta { display: none; }
+    .grid-4, .grid-3 { grid-template-columns: 1fr; }
+  }
+
+</style>
+</head>
+<body>
+
+
+  <div class="login" id="loginScreen">
+    <div class="login-box">
+
+      <div class="login-logo">
+        <div class="mark">ASSS</div>
+        <div>
+          <strong>Abomsa Senior Secondary School Portal</strong>
+          <small>Access Portal</small>
+        </div>
+      </div>
+
+      <h2 id="formTitle">Sign in</h2>
+
+      <p class="error-box" id="errorBox"></p>
+
+      <form id="authForm" novalidate>
+
+        <div class="form-group">
+          <label for="loginId" id="loginIdLabel">Username or full name</label>
+          <input type="text" id="loginId" placeholder="Enter your username"
+                 required autocomplete="username">
+        </div>
+
+        <div id="signupOnlyFields" style="display:none;">
+
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Choose a username"
+                   autocomplete="off">
+          </div>
+
+          <div class="form-group">
+            <label for="grade">Grade</label>
+            <input type="number" id="grade" placeholder="Enter your grade"
+                   min="1" max="12">
+          </div>
+
+          <div class="form-group" id="streamGroup" style="display:none;">
+            <label for="stream">Stream</label>
+            <select id="stream">
+              <option value="">Select your stream</option>
+              <option value="natural">Natural Science</option>
+              <option value="social">Social Science</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="subjectsGroup" style="display:none;">
+            <label id="subjectsTitle">Subjects</label>
+            <ul class="subject-list" id="subjectsList"></ul>
+          </div>
+
+        </div>
+
+        <div class="form-group">
+          <label for="logginPassword">Password</label>
+          <input type="password" id="logginPassword" placeholder="Enter your password"
+                 required autocomplete="current-password">
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn-login">Sign in</button>
+      </form>
+
+      <p class="switch-line">
+        <span id="switchText">Don't have an account?</span>
+        <a href="#" id="switchLink">Create one</a>
+      </p>
+
+    </div>
+  </div>
+
+
+  <div class="app" id="app">
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="mark">ASSS</div>
+        <div>
+          <strong>Abomsa Senior Secondary School</strong>
+          <small>ASSS portal</small>
+        </div>
+      </div>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-footer">© 2026 Abomsa Senior Secondary School</div>
+    </aside>
+
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+        <div class="page-title" id="pageTitle">Dashboard</div>
+      </div>
+
+      <div class="topbar-right">
+        <div class="search-box">
+          <span>🔍</span>
+          <input type="text" placeholder="Search...">
+        </div>
+        <button class="icon-btn">🔔<span class="dot"></span></button>
+        <div class="user-chip" onclick="logout()" title="Sign out">
+          <div class="avatar" id="userAvatar">S</div>
+          <div class="meta">
+            <strong id="userName">Student</strong>
+            <small id="userRole">Student</small>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="main" id="mainContent"></main>
+  </div>
+
+
+  <div class="modal-back" id="modalBack">
+    <div class="modal" id="modalBox"></div>
+  </div>
+
+<script>
+
+  var DB = null;
+  var SESSION = null;
+  var currentUser = null;
+  var currentRole = 'student';
+  var currentPage = 'dashboard';
+  var mode = 'signin';
+
+  var DB_KEY = 'asss_portal_db_v1';
+
+  var ROLE_LABEL = {
+    student:'Student',
+    admin:'Administrator',
+    super_admin:'Super Administrator'
+  };
+
+  var SUBJECTS = {
+    natural: ['Mathematics', 'Physics',   'Chemistry', 'Biology', 'English',  'ICT'],
+    social:  ['Mathematics', 'Geography', 'History', 'Economics', 'English', 'ICT']
+  };
+
+
+  var NAV = {
+    student: [
+      { section:'Main', items: [
+        { id: 'dashboard',icon: '📊', label: 'Dashboard' },
+        { id: 'grades', icon: '📝', label: 'My Grades' },
+        { id: 'attendance', icon: '📅', label: 'Attendance' }
+     ]},
+    { section: 'Learning', items: [
+      { id: 'subjects', icon: '📚', label: 'Subjects' },
+      { id: 'books', icon: '📖', label: 'Textbooks' }
+    ]},
+    { section: 'Account', items: [
+      { id: 'account', icon: '⚙️', label: 'Account Settings' }
+    ]}
+  ],
+
+  admin: [
+    { section: 'Main', items: [
+      { id: 'dashboard', icon: '📊', label: 'Dashboard' },
+      { id: 'analytics', icon: '📈', label: 'Analytics' }
+    ]},
+    { section: 'Management', items: [
+      { id: 'students', icon: '🎓', label: 'Students' },
+      { id: 'teachers', icon: '👨‍🏫', label: 'Teachers' }
+    ]},
+    { section: 'Academics', items: [
+      { id: 'grades',        icon: '📝', label: 'Grade Entry' },
+      { id: 'attendance',    icon: '📅', label: 'Attendance' },
+      { id: 'announcements', icon: '📢', label: 'Announcements' }
+    ]},
+    { section: 'Account', items: [
+      { id: 'account', icon: '⚙️', label: 'Account Settings' }
+    ]}
+  ],
+
+  super_admin: [
+    { section: 'Main', items: [
+      { id: 'dashboard', icon: '📊', label: 'Dashboard' },
+      { id: 'analytics', icon: '📈', label: 'Analytics' }
+    ]},
+    { section: 'Management', items: [
+      { id: 'students', icon: '🎓', label: 'Students' },
+      { id: 'admins', icon: '🛡️', label: 'Administrators' },
+      { id: 'teachers', icon: '👨‍🏫', label: 'Teachers' }
+    ]},
+    { section: 'Academics', items: [
+      { id: 'grades', icon: '📝', label: 'Grade Entry' },
+      { id: 'attendance', icon: '📅', label: 'Attendance' },
+      { id: 'announcements', icon: '📢', label: 'Announcements' }
+    ]},
+    { section: 'System', items: [
+      { id: 'audit', icon: '📜', label: 'Audit Log' },
+      { id: 'settings', icon: '🔐', label: 'System Settings' }
+    ]},
+    { section: 'Account', items: [
+      { id: 'account', icon: '⚙️', label: 'Account Settings' }
+    ]}
+  ]
+};
+
+
+var ALLOWED = {
+  student: ['dashboard','grades','attendance','subjects','books','account'],
+  admin: ['dashboard','analytics','students','teachers','grades','attendance','announcements','account'],
+  super_admin: ['dashboard','analytics','students','admins','teachers','grades','attendance','announcements','audit','settings','account']
+};
+
+var PAGE_TITLES = {
+  dashboard: ['Dashboard',        'Overview of your portal'],
+  analytics: ['Analytics', 'School performance insights'],
+  students: ['Students', 'Manage student accounts'],
+  admins:['Administrators', 'Manage administrator accounts'],
+  teachers: ['Teachers', 'Manage teaching staff'],
+  grades: ['Grades', 'Grade entry and review'],
+  attendance: ['Attendance', 'Daily attendance records'],
+  announcements: ['Announcements', 'Publish notices to the school'],
+  audit: ['Audit Log', 'Recent system activity'],
+  settings: ['System Settings', 'Portal configuration'],
+  account: ['Account Settings', 'Your profile and password'],
+  subjects: ['Subjects', 'Your enrolled subjects'],
+  books: ['Textbooks', 'Available learning materials']
+};
+
+function uid(prefix) {
+  return prefix + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
+
+function hashPassword(plain) {
+  var h1 = 0x811c9dc5, h2 = 5381;
+  var s = 'asss::' + String(plain) + '::v1';
+  for (var i = 0; i < s.length; i++) {
+    var c = s.charCodeAt(i);
+    h1 = ((h1 ^ c) * 16777619) >>> 0;
+    h2 = (((h2 << 5) + h2) + c) >>> 0;
+  }
+  return 'h' + h1.toString(16).padStart(8, '0') + h2.toString(16).padStart(8, '0');
+}
+
+function esc(v) {
+  return String(v == null ? '' : v)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function initials(name) {
+  var parts = String(name || '?').trim().split(/\s+/);
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+function streamLabel(s) {
+  if (s === 'natural') return 'Natural Science';
+  if (s === 'social')  return 'Social Science';
+  return '—';
+}
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  var d = new Date(iso);
+  if (isNaN(d)) return '—';
+  return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function fmtDateTime(iso) {
+  if (!iso) return '—';
+  var d = new Date(iso);
+  if (isNaN(d)) return '—';
+  return d.toLocaleString(undefined, {
+    year: 'numeric', month: 'short', day: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+}
+
+
+function saveDB() {
+  localStorage.setItem(DB_KEY, JSON.stringify(DB));
+}
+
+function logAudit(actorName, action, detail) {
+  DB.audit.unshift({
+    id: uid('a'),
+    at: new Date().toISOString(),
+    by: actorName || 'system',
+    action: action,
+    detail: detail || ''
+  });
+  if (DB.audit.length > 500) DB.audit.length = 500;
+  saveDB();
+}
+
+function loadDB() {
+  try {
+    DB = JSON.parse(localStorage.getItem(DB_KEY));
+  } catch (e) {
+    DB = null;
+  }
+
+  if (!DB || !Array.isArray(DB.users) || DB.users.length === 0) {
+    DB = { users: [], audit: [] };
+
+    DB.users.push({
+      id: 'u_root',
+      username: 'superadmin',
+      name: 'Super Administrator',
+      role: 'super_admin',
+      password: hashPassword('123456'),
+      active: true,
+      mustChangePassword: true,
+      createdAt: new Date().toISOString(),
+      createdBy: 'system'
+    });
+
+    saveDB();
+    logAudit('system', 'bootstrap', 'Default super admin account created');
+  }
+
+  if (!Array.isArray(DB.audit)) DB.audit = [];
+
+  SESSION = localStorage.getItem(DB_KEY + '_session') || null;
+}
+
+function setSession(userId) {
+  SESSION = userId || null;
+  if (userId) localStorage.setItem(DB_KEY + '_session', userId);
+  else localStorage.removeItem(DB_KEY + '_session');
+}
+
+function findUserById(id) {
+  for (var i = 0; i < DB.users.length; i++) {
+    if (DB.users[i].id === id) return DB.users[i];
+  }
+  return null;
+}
+
+function findUserByLogin(value) {
+  var q = String(value || '').trim().toLowerCase();
+  if (!q) return null;
+
+  var i;
+  for (i = 0; i < DB.users.length; i++) {
+    if (DB.users[i].username.toLowerCase() === q) return DB.users[i];
+  }
+  for (i = 0; i < DB.users.length; i++) {
+    if (String(DB.users[i].name).toLowerCase() === q) return DB.users[i];
+  }
+  return null;
+}
+
+
+function showError(message) {
+  var box = document.getElementById('errorBox');
+  box.textContent = message;
+  box.style.display = 'block';
+}
+
+function hideError() {
+  var box = document.getElementById('errorBox');
+  box.textContent = '';
+  box.style.display = 'none';
+}
+
+function renderSubjects(stream) {
+  var group = document.getElementById('subjectsGroup');
+  var title = document.getElementById('subjectsTitle');
+  var list  = document.getElementById('subjectsList');
+
+  list.innerHTML = '';
+
+  var subjects = SUBJECTS[stream] || null;
+
+  if (!subjects) {
+    group.style.display = 'none';
+    return;
+  }
+
+  title.textContent = stream === 'natural' ? 'Natural Science subjects' : 'Social Science subjects';
+
+  for (var i = 0; i < subjects.length; i++) {
+    var li = document.createElement('li');
+    li.textContent = subjects[i];
+    list.appendChild(li);
+  }
+
+  group.style.display = 'block';
+}
+
+function updateStreamField() {
+  var gradeInput = document.getElementById('grade');
+  var streamGroup = document.getElementById('streamGroup');
+  var streamSelect = document.getElementById('stream');
+
+  var grade = Number(gradeInput.value);
+
+  if (grade === 11 || grade === 12) {
+    streamGroup.style.display = 'block';
+    streamSelect.required = true;
+  } else {
+    streamGroup.style.display = 'none';
+    streamSelect.required = false;
+    streamSelect.value = '';
+    renderSubjects('');
+  }
+}
+
+function setMode(newMode) {
+  mode = newMode;
+  hideError();
+
+  var formTitle = document.getElementById('formTitle');
+  var signupFields = document.getElementById('signupOnlyFields');
+  var loginId = document.getElementById('loginId');
+  var loginIdLabel = document.getElementById('loginIdLabel');
+  var usernameEl = document.getElementById('username');
+  var gradeInput = document.getElementById('grade');
+  var streamSelect = document.getElementById('stream');
+  var passwordInput = document.getElementById('logginPassword');
+  var submitBtn = document.getElementById('submitBtn');
+  var switchText = document.getElementById('switchText');
+  var switchLink = document.getElementById('switchLink');
+
+
+
+  if (mode === 'signup') {
+    formTitle.textContent = 'Create account';
+    signupFields.style.display = 'block';
+
+    loginIdLabel.textContent = 'Full name';
+    loginId.placeholder = 'Enter your full name';
+    loginId.autocomplete = 'name';
+
+    usernameEl.value = '';
+    gradeInput.required = true;
+
+    passwordInput.placeholder = 'Set your password';
+    passwordInput.autocomplete = 'new-password';
+
+    submitBtn.textContent  = 'Create account';
+    switchText.textContent = 'Already have an account?';
+    switchLink.textContent = 'Sign in';
+
+  } else {
+    formTitle.textContent    = 'Sign in';
+    signupFields.style.display = 'none';
+
+    loginIdLabel.textContent = 'Username or full name';
+    loginId.placeholder      = 'Enter your username';
+    loginId.autocomplete     = 'username';
+
+    gradeInput.required   = false;
+    streamSelect.required = false;
+    gradeInput.value      = '';
+    streamSelect.value    = '';
+    renderSubjects('');
+
+    passwordInput.placeholder  = 'Enter your password';
+    passwordInput.autocomplete = 'current-password';
+
+    submitBtn.textContent  = 'Sign in';
+    switchText.textContent = "Don't have an account?";
+    switchLink.textContent = 'Create one';
+  }
+}
+
+
+function enterApp(user) {
+  currentUser = user;
+  currentRole = user.role;
+  setSession(user.id);
+
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('app').classList.add('active');
+
+  document.getElementById('userName').textContent   = user.name;
+  document.getElementById('userRole').textContent   = ROLE_LABEL[user.role];
+  document.getElementById('userAvatar').textContent = initials(user.name);
+
+  buildNav();
+  navigate('dashboard');
+}
+
+function logout() {
+  if (currentUser) logAudit(currentUser.name, 'auth.signout', ROLE_LABEL[currentUser.role]);
+  setSession(null);
+  currentUser = null;
+
+  document.getElementById('app').classList.remove('active');
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('sidebar').classList.remove('open');
+
+  var form = document.getElementById('authForm');
+  form.reset();
+  setMode('signin');
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+function buildNav() {
+  var nav = document.getElementById('sidebarNav');
+  var groups = NAV[currentRole] || [];
+  var html = '';
+
+  for (var g = 0; g < groups.length; g++) {
+    html += '<div class="nav-label">' + esc(groups[g].section) + '</div>';
+
+    for (var i = 0; i < groups[g].items.length; i++) {
+      var item = groups[g].items[i];
+      var badge = item.badge ? '<span class="badge">' + esc(item.badge) + '</span>' : '';
+      html += '<div class="nav-item" data-page="' + esc(item.id) + '" onclick="navigate(\'' + item.id + '\')">' +
+                '<span class="icon">' + item.icon + '</span>' +
+                '<span>' + esc(item.label) + '</span>' + badge +
+              '</div>';
+    }
+  }
+
+  nav.innerHTML = html;
+}
+
+function navigate(page) {
+  var allowed = ALLOWED[currentRole] || [];
+
+  if (allowed.indexOf(page) === -1) page = 'dashboard';
+
+  currentPage = page;
+
+  var items = document.querySelectorAll('.nav-item');
+  for (var i = 0; i < items.length; i++) {
+    items[i].classList.toggle('active', items[i].getAttribute('data-page') === page);
+  }
+
+  var meta = PAGE_TITLES[page] || ['Dashboard', ''];
+  document.getElementById('pageTitle').innerHTML =
+    esc(meta[0]) + (meta[1] ? '<small>' + esc(meta[1]) + '</small>' : '');
+
+  document.getElementById('sidebar').classList.remove('open');
+  window.scrollTo(0, 0);
+
+  var renderers = {
+    dashboard: renderDashboard,
+    students: renderStudents,
+    admins: renderAdmins,
+    audit: renderAudit,
+    account: renderAccount,
+    analytics: renderAnalytics,
+    teachers: renderTeachers,
+    grades: renderGrades,
+    attendance: renderAttendance,
+    announcements: renderAnnouncements,
+    settings: renderSettings,
+    subjects: renderSubjectsPage,
+    books: renderBooks
+  };
+
+  var fn = renderers[page] || renderPlaceholder;
+  fn();
+}
+
+
+function showModal(html) {
+  document.getElementById('modalBox').innerHTML = html;
+  document.getElementById('modalBack').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalBack').classList.remove('open');
+  document.getElementById('modalBox').innerHTML = '';
+}
+
+function modalError(msg) {
+  var box = document.getElementById('modalError');
+  if (!box) return;
+  if (msg) {
+    box.textContent = msg;
+    box.style.display = 'block';
+  } else {
+    box.textContent = '';
+    box.style.display = 'none';
+  }
+}
+
+
+function statCard(label, value, hint) {
+  return '<div class="stat">' +
+           '<div class="label">' + esc(label) + '</div>' +
+           '<div class="value">' + esc(value) + '</div>' +
+           (hint ? '<div class="hint">' + esc(hint) + '</div>' : '') +
+         '</div>';
+}
+
+function tableWrap(headers, rows, emptyText) {
+  if (!rows.length) {
+    return '<div class="table-wrap"><div class="empty">' + esc(emptyText || 'Nothing here yet.') + '</div></div>';
+  }
+
+  var head = '<tr>';
+  for (var h = 0; h < headers.length; h++) head += '<th>' + esc(headers[h]) + '</th>';
+  head += '</tr>';
+
+  var body = '';
+  for (var r = 0; r < rows.length; r++) {
+    body += '<tr>';
+    for (var c = 0; c < rows[r].length; c++) body += '<td>' + rows[r][c] + '</td>';
+    body += '</tr>';
+  }
+
+  return '<div class="table-wrap"><table class="table"><thead>' + head + '</thead><tbody>' + body + '</tbody></table></div>';
+}
+
+function main() { return document.getElementById('mainContent'); }
+
+
+function renderDashboard() {
+  var u = currentUser;
+  var html = '';
+
+  if (u.role === 'student') {
+    var subs = u.subjects || [];
+
+    html += '<div class="grid grid-4">' +
+              statCard('Grade', u.grade ? 'Grade ' + u.grade : '—') +
+              statCard('Stream', u.stream ? streamLabel(u.stream) : 'General') +
+              statCard('Subjects', subs.length) +
+              statCard('Status', u.active ? 'Active' : 'Disabled') +
+            '</div>';
+
+    html += '<div class="card">' +
+              '<h3>Welcome, ' + esc(u.name) + '</h3>' +
+              '<p class="sub">You are signed in to the Abomsa Senior Secondary School portal as a student.</p>' +
+              '<div class="row">' +
+                '<button class="btn primary" onclick="navigate(\'subjects\')">View my subjects</button>' +
+                '<button class="btn" onclick="navigate(\'grades\')">My grades</button>' +
+                '<button class="btn" onclick="navigate(\'account\')">Account settings</button>' +
+              '</div>' +
+            '</div>';
+
+    if (u.mustChangePassword) {
+      html = '<div class="notice amber">Your password was set or reset by an administrator. ' +
+             'Please <a href="#" onclick="navigate(\'account\');return false;" style="text-decoration:underline;font-weight:700">change it now</a>.</div>' + html;
+    }
+
+  } else {
+    var students = DB.users.filter(function (x) { return x.role === 'student'; });
+    var admins   = DB.users.filter(function (x) { return x.role === 'admin'; });
+    var supers   = DB.users.filter(function (x) { return x.role === 'super_admin'; });
+    var disabled = DB.users.filter(function (x) { return !x.active; });
+
+    html += '<div class="grid grid-4">' +
+              statCard('Students', students.length, students.filter(function (s) { return s.active; }).length + ' active') +
+              statCard('Administrators', admins.length, supers.length + ' super admin' + (supers.length === 1 ? '' : 's')) +
+              statCard('Disabled accounts', disabled.length) +
+              statCard('Audit entries', DB.audit.length) +
+            '</div>';
+
+    html += '<div class="card">' +
+              '<h3>Welcome, ' + esc(u.name) + '</h3>' +
+              '<p class="sub">You are signed in as ' + esc(ROLE_LABEL[u.role]) + '.</p>' +
+              '<div class="row">' +
+                '<button class="btn primary" onclick="navigate(\'students\')">Manage students</button>' +
+                (u.role === 'super_admin'
+                  ? '<button class="btn" onclick="navigate(\'admins\')">Manage administrators</button>' +
+                    '<button class="btn" onclick="navigate(\'audit\')">Audit log</button>'
+                  : '') +
+              '</div>' +
+            '</div>';
+
+    if (u.mustChangePassword) {
+      html = '<div class="notice amber">You are still using the default bootstrap password. ' +
+             'Please <a href="#" onclick="navigate(\'account\');return false;" style="text-decoration:underline;font-weight:700">change it now</a>.</div>' + html;
+    }
+
+    /* recent activity preview */
+    var recent = DB.audit.slice(0, 6).map(function (a) {
+      return [
+        '<span class="nowrap muted">' + esc(fmtDateTime(a.at)) + '</span>',
+        esc(a.by),
+        '<span class="tag blue">' + esc(a.action) + '</span>',
+        esc(a.detail)
+      ];
+    });
+
+    html += '<div class="card" style="padding-bottom:6px"><h3>Recent activity</h3>' +
+            '<p class="sub">The latest actions recorded in the system.</p></div>' +
+            tableWrap(['When', 'Who', 'Action', 'Detail'], recent, 'No activity recorded yet.');
+  }
+
+  main().innerHTML = html;
+}
+
+
+function renderStudents() {
+  if (currentRole !== 'admin' && currentRole !== 'super_admin') return renderPlaceholder();
+
+  var list = DB.users.filter(function (u) { return u.role === 'student'; })
+                     .sort(function (a, b) { return a.name.localeCompare(b.name); });
+
+  var rows = list.map(function (u) {
+    return [
+      '<strong>' + esc(u.name) + '</strong><br><small class="muted">@' + esc(u.username) + '</small>',
+      u.grade ? 'Grade ' + esc(u.grade) : '—',
+      esc(streamLabel(u.stream)),
+      u.active ? '<span class="tag green">Active</span>' : '<span class="tag red">Disabled</span>',
+      '<span class="nowrap muted">' + esc(fmtDate(u.createdAt)) + '</span>',
+      '<div class="row">' +
+        '<button class="btn sm" onclick="openStudentForm(\'' + u.id + '\')">Edit</button>' +
+        '<button class="btn sm" onclick="openResetPassword(\'' + u.id + '\')">Reset password</button>' +
+        '<button class="btn sm ' + (u.active ? 'danger' : '') + '" onclick="toggleUserActive(\'' + u.id + '\')">' +
+          (u.active ? 'Disable' : 'Enable') +
+        '</button>' +
+        '<button class="btn sm danger" onclick="deleteUser(\'' + u.id + '\')">Delete</button>' +
+      '</div>'
+    ];
+  });
+
+  main().innerHTML =
+    '<div class="card">' +
+      '<div class="row between">' +
+        '<div>' +
+          '<h3>Student accounts</h3>' +
+          '<p class="sub" style="margin:0">' + list.length + ' registered student' + (list.length === 1 ? '' : 's') + '</p>' +
+        '</div>' +
+        '<button class="btn primary" onclick="openStudentForm()">+ Add student</button>' +
+      '</div>' +
+    '</div>' +
+    tableWrap(['Student', 'Grade', 'Stream', 'Status', 'Registered', 'Actions'], rows, 'No student accounts yet.');
+}
+
+function openStudentForm(id) {
+  var u = id ? findUserById(id) : null;
+  if (id && !u) return;
+
+  var grade = u && u.grade ? u.grade : '';
+  var stream = u && u.stream ? u.stream : '';
+  var showStream = (Number(grade) === 11 || Number(grade) === 12);
+
+  showModal(
+    '<h3>' + (u ? 'Edit student' : 'Add student') + '</h3>' +
+    '<p class="error-box" id="modalError"></p>' +
+
+    '<div class="form-group"><label>Full name</label>' +
+      '<input type="text" id="mName" value="' + esc(u ? u.name : '') + '" placeholder="Student full name"></div>' +
+
+    '<div class="form-group"><label>Username</label>' +
+      '<input type="text" id="mUsername" value="' + esc(u ? u.username : '') + '" placeholder="e.g. abebe.k"></div>' +
+
+    '<div class="form-group"><label>Grade</label>' +
+      '<input type="number" id="mGrade" min="1" max="12" value="' + esc(grade) + '" placeholder="1 – 12"></div>' +
+
+    '<div class="form-group" id="mStreamGroup" style="display:' + (showStream ? 'block' : 'none') + ';">' +
+      '<label>Stream</label>' +
+      '<select id="mStream">' +
+        '<option value="">Select stream</option>' +
+        '<option value="natural"' + (stream === 'natural' ? ' selected' : '') + '>Natural Science</option>' +
+        '<option value="social"' + (stream === 'social' ? ' selected' : '') + '>Social Science</option>' +
+      '</select>' +
+    '</div>' +
+
+    '<div class="form-group"><label>Password' + (u ? ' (leave blank to keep current)' : '') + '</label>' +
+      '<input type="password" id="mPassword" placeholder="' + (u ? 'Unchanged' : 'At least 6 characters') + '"></div>' +
+
+    '<div class="row end" style="margin-top:18px">' +
+      '<button class="btn" onclick="closeModal()">Cancel</button>' +
+      '<button class="btn primary" onclick="saveStudent(\'' + (u ? u.id : '') + '\')">' +
+        (u ? 'Save changes' : 'Create student') +
+      '</button>' +
+    '</div>'
+  );
+
+  var gradeEl = document.getElementById('mGrade');
+  gradeEl.addEventListener('input', function () {
+    var g = Number(gradeEl.value);
+    document.getElementById('mStreamGroup').style.display = (g === 11 || g === 12) ? 'block' : 'none';
+  });
+}
+
+function saveStudent(id) {
+  var name = document.getElementById('mName').value.trim();
+  var username = document.getElementById('mUsername').value.trim().toLowerCase();
+  var grade = Number(document.getElementById('mGrade').value);
+  var stream   = document.getElementById('mStream').value;
+  var password = document.getElementById('mPassword').value;
+
+  if (name.length < 2) { modalError('Enter the student\'s full name.'); return; }
+  if (!/^[a-z0-9._-]{3,20}$/.test(username)) {
+    modalError('Username must be 3–20 characters: letters, numbers, dot, dash or underscore.');
+    return;
+  }
+  var clash = DB.users.some(function (u) {
+    return u.username.toLowerCase() === username && u.id !== id;
+  });
+  if (clash) { modalError('That username is already taken.'); return; }
+
+  if (!grade || grade < 1 || grade > 12) { modalError('Enter a grade between 1 and 12.'); return; }
+  if ((grade === 11 || grade === 12) && !stream) { modalError('Select a stream for grade 11 or 12.'); return; }
+
+  if (!id && password.length < 6) { modalError('Password must be at least 6 characters.'); return; }
+  if (id && password && password.length < 6) { modalError('Password must be at least 6 characters.'); return; }
+
+  if (id) {
+    var u = findUserById(id);
+    if (!u) return;
+
+    u.name  = name;
+    u.username = username;
+    u.grade = grade;
+    u.stream = (grade === 11 || grade === 12) ? stream : null;
+    u.subjects = u.stream ? SUBJECTS[u.stream].slice() : [];
+
+    if (password) {
+      u.password = hashPassword(password);
+      u.mustChangePassword = true;
+    }
+
+    logAudit(currentUser.name, 'student.update', u.name + ' (@' + u.username + ')');
+  } else {
+    var nu = {
+      id: uid('u'),
+      username: username,
+      name: name,
+      role: 'student',
+      password: hashPassword(password),
+      grade: grade,
+      stream: (grade === 11 || grade === 12) ? stream : null,
+      subjects: (grade === 11 || grade === 12) ? SUBJECTS[stream].slice() : [],
+      active: true,
+      mustChangePassword: true,
+      createdAt: new Date().toISOString(),
+      createdBy: currentUser.name
+    };
+    DB.users.push(nu);
+    logAudit(currentUser.name, 'student.create', name + ' (@' + username + ')');
+  }
+
+  saveDB();
+  closeModal();
+  renderStudents();
+}
+
+
+function renderAdmins() {
+  if (currentRole !== 'super_admin') return renderPlaceholder();
+
+  var list = DB.users.filter(function (u) {
+    return u.role === 'admin' || u.role === 'super_admin';
+  }).sort(function (a, b) {
+    if (a.role !== b.role) return a.role === 'super_admin' ? -1 : 1;
+    return a.name.localeCompare(b.name);
+  });
+
+  var rows = list.map(function (u) {
+    var isRoot = u.id === 'u_root';
+    var self   = currentUser && u.id === currentUser.id;
+
+    return [
+      '<strong>' + esc(u.name) + '</strong><br><small class="muted">@' + esc(u.username) + '</small>',
+      u.role === 'super_admin'
+        ? '<span class="tag blue">Super Administrator</span>'
+        : '<span class="tag amber">Administrator</span>',
+      u.active ? '<span class="tag green">Active</span>' : '<span class="tag red">Disabled</span>',
+      '<span class="nowrap muted">' + esc(fmtDate(u.createdAt)) + '</span>',
+      '<div class="row">' +
+        '<button class="btn sm" onclick="openAdminForm(\'' + u.id + '\')">Edit</button>' +
+        '<button class="btn sm" onclick="openResetPassword(\'' + u.id + '\')">Reset password</button>' +
+        (isRoot || self
+          ? '<span class="muted" style="font-size:.72rem">' + (self ? 'You' : 'Protected') + '</span>'
+          : '<button class="btn sm ' + (u.active ? 'danger' : '') + '" onclick="toggleUserActive(\'' + u.id + '\')">' +
+              (u.active ? 'Disable' : 'Enable') +
+            '</button>' +
+            '<button class="btn sm danger" onclick="deleteUser(\'' + u.id + '\')">Delete</button>') +
+      '</div>'
+    ];
+  });
+
+  main().innerHTML =
+    '<div class="card">' +
+      '<div class="row between">' +
+        '<div>' +
+          '<h3>Administrator accounts</h3>' +
+          '<p class="sub" style="margin:0">Only a super administrator can create, edit or remove administrators.</p>' +
+        '</div>' +
+        '<button class="btn primary" onclick="openAdminForm()">+ Add administrator</button>' +
+      '</div>' +
+    '</div>' +
+    tableWrap(['Account', 'Role', 'Status', 'Created', 'Actions'], rows, 'No administrator accounts.');
+}
+
+function openAdminForm(id) {
+  var u = id ? findUserById(id) : null;
+  if (id && !u) return;
+
+  var canChangeRole = !u || u.id !== 'u_root';
+
+  showModal(
+    '<h3>' + (u ? 'Edit administrator' : 'Add administrator') + '</h3>' +
+    '<p class="error-box" id="modalError"></p>' +
+
+    '<div class="form-group"><label>Full name</label>' +
+      '<input type="text" id="mName" value="' + esc(u ? u.name : '') + '" placeholder="Administrator full name"></div>' +
+
+    '<div class="form-group"><label>Username</label>' +
+      '<input type="text" id="mUsername" value="' + esc(u ? u.username : '') + '" placeholder="e.g. j.doe"></div>' +
+
+    '<div class="form-group"><label>Role</label>' +
+      '<select id="mRole"' + (canChangeRole ? '' : ' disabled') + '>' +
+        '<option value="admin"' + (u && u.role === 'admin' ? ' selected' : '') + '>Administrator</option>' +
+        '<option value="super_admin"' + (u && u.role === 'super_admin' ? ' selected' : '') + '>Super Administrator</option>' +
+      '</select></div>' +
+
+    '<div class="form-group"><label>Password' + (u ? ' (leave blank to keep current)' : '') + '</label>' +
+      '<input type="password" id="mPassword" placeholder="' + (u ? 'Unchanged' : 'At least 6 characters') + '"></div>' +
+
+    '<div class="row end" style="margin-top:18px">' +
+      '<button class="btn" onclick="closeModal()">Cancel</button>' +
+      '<button class="btn primary" onclick="saveAdmin(\'' + (u ? u.id : '') + '\')">' +
+        (u ? 'Save changes' : 'Create administrator') +
+      '</button>' +
+    '</div>'
+  );
+}
+
+function saveAdmin(id) {
+  var name     = document.getElementById('mName').value.trim();
+  var username = document.getElementById('mUsername').value.trim().toLowerCase();
+  var role     = document.getElementById('mRole').value;
+  var password = document.getElementById('mPassword').value;
+
+  if (name.length < 2) { modalError('Enter the administrator\'s full name.'); return; }
+  if (!/^[a-z0-9._-]{3,20}$/.test(username)) {
+    modalError('Username must be 3–20 characters: letters, numbers, dot, dash or underscore.');
+    return;
+  }
+
+  var clash = DB.users.some(function (u) {
+    return u.username.toLowerCase() === username && u.id !== id;
+  });
+  if (clash) { modalError('That username is already taken.'); return; }
+
+  if (!id && password.length < 6) { modalError('Password must be at least 6 characters.'); return; }
+  if (id && password && password.length < 6) { modalError('Password must be at least 6 characters.'); return; }
+
+  if (id) {
+    var u = findUserById(id);
+    if (!u) return;
+
+    u.name = name;
+    u.username = username;
+    if (u.id !== 'u_root') u.role = role;
+
+    if (password) {
+      u.password = hashPassword(password);
+      u.mustChangePassword = true;
+    }
+
+    logAudit(currentUser.name, 'admin.update', u.name + ' (@' + u.username + ')');
+  } else {
+    DB.users.push({
+      id: uid('u'),
+      username: username,
+      name: name,
+      role: role,
+      password: hashPassword(password),
+      active: true,
+      mustChangePassword: true,
+      createdAt: new Date().toISOString(),
+      createdBy: currentUser.name
+    });
+    logAudit(currentUser.name, 'admin.create', name + ' (@' + username + ') — ' + ROLE_LABEL[role]);
+  }
+
+  saveDB();
+  closeModal();
+  renderAdmins();
+}
+
+
+function toggleUserActive(id) {
+  var u = findUserById(id);
+  if (!u) return;
+  if (u.id === 'u_root') return;
+  if (currentUser && u.id === currentUser.id) return;
+
+  u.active = !u.active;
+  logAudit(currentUser.name, u.active ? 'account.enable' : 'account.disable',
+           u.name + ' (@' + u.username + ')');
+  saveDB();
+
+  if (u.role === 'student') renderStudents();
+  else renderAdmins();
+}
+
+function deleteUser(id) {
+  var u = findUserById(id);
+  if (!u) return;
+  if (u.id === 'u_root') return;
+  if (currentUser && u.id === currentUser.id) return;
+
+  if (!confirm('Permanently delete "' + u.name + '" (@' + u.username + ')?\nThis cannot be undone.')) return;
+
+  DB.users = DB.users.filter(function (x) { return x.id !== id; });
+  logAudit(currentUser.name, 'account.delete', u.name + ' (@' + u.username + ')');
+  saveDB();
+
+  if (u.role === 'student') renderStudents();
+  else renderAdmins();
+}
+
+function openResetPassword(id) {
+  var u = findUserById(id);
+  if (!u) return;
+
+  showModal(
+    '<h3>Reset password</h3>' +
+    '<p class="sub" style="font-size:.8rem;color:var(--muted);margin-bottom:14px">' +
+      'Set a new password for <strong>' + esc(u.name) + '</strong> (@' + esc(u.username) + '). ' +
+      'They will be asked to change it after signing in.' +
+    '</p>' +
+    '<p class="error-box" id="modalError"></p>' +
+    '<div class="form-group"><label>New password</label>' +
+      '<input type="password" id="mNewPassword" placeholder="At least 6 characters"></div>' +
+    '<div class="row end" style="margin-top:18px">' +
+      '<button class="btn" onclick="closeModal()">Cancel</button>' +
+      '<button class="btn primary" onclick="applyResetPassword(\'' + u.id + '\')">Reset password</button>' +
+    '</div>'
+  );
+}
+
+function applyResetPassword(id) {
+  var u = findUserById(id);
+  if (!u) return;
+
+  var pw = document.getElementById('mNewPassword').value;
+  if (pw.length < 6) { modalError('Password must be at least 6 characters.'); return; }
+
+  u.password = hashPassword(pw);
+  u.mustChangePassword = true;
+
+  logAudit(currentUser.name, 'account.reset_password', u.name + ' (@' + u.username + ')');
+  saveDB();
+  closeModal();
+
+  alert('Password updated for ' + u.name + '.');
+}
+
+
+function renderAudit() {
+  if (currentRole !== 'super_admin') return renderPlaceholder();
+
+  var rows = DB.audit.slice(0, 200).map(function (a) {
+    return [
+      '<span class="nowrap muted">' + esc(fmtDateTime(a.at)) + '</span>',
+      esc(a.by),
+      '<span class="tag blue">' + esc(a.action) + '</span>',
+      esc(a.detail)
+    ];
+  });
+
+  main().innerHTML =
+    '<div class="card">' +
+      '<div class="row between">' +
+        '<div>' +
+          '<h3>Audit log</h3>' +
+          '<p class="sub" style="margin:0">The most recent 200 recorded actions.</p>' +
+        '</div>' +
+        '<button class="btn danger" onclick="clearAudit()">Clear log</button>' +
+      '</div>' +
+    '</div>' +
+    tableWrap(['When', 'Who', 'Action', 'Detail'], rows, 'No activity recorded yet.');
+}
+
+function clearAudit() {
+  if (currentRole !== 'super_admin') return;
+  if (!confirm('Clear the entire audit log?')) return;
+
+  DB.audit = [];
+  logAudit(currentUser.name, 'audit.clear', 'Audit log cleared');
+  saveDB();
+  renderAudit();
+}
+
+
+function renderAccount() {
+  var u = currentUser;
+
+  var extra = '';
+  if (u.role === 'student') {
+    extra =
+      '<div class="form-group"><label>Grade</label>' +
+        '<input type="text" value="' + esc(u.grade ? 'Grade ' + u.grade : '—') + '" disabled></div>' +
+      '<div class="form-group"><label>Stream</label>' +
+        '<input type="text" value="' + esc(u.stream ? streamLabel(u.stream) : 'General') + '" disabled></div>';
+  } else {
+    extra =
+      '<div class="form-group"><label>Role</label>' +
+        '<input type="text" value="' + esc(ROLE_LABEL[u.role]) + '" disabled></div>';
+  }
+
+  main().innerHTML =
+    '<div class="card" style="max-width:520px">' +
+      '<h3>Profile</h3>' +
+      '<p class="sub">Signed in as <strong>' + esc(u.name) + '</strong> · @' + esc(u.username) + '</p>' +
+      '<div class="form-group"><label>Full name</label>' +
+        '<input type="text" value="' + esc(u.name) + '" disabled></div>' +
+      '<div class="form-group"><label>Username</label>' +
+        '<input type="text" value="' + esc(u.username) + '" disabled></div>' +
+      extra +
+    '</div>' +
+
+    '<div class="card" style="max-width:520px">' +
+      '<h3>Change password</h3>' +
+      '<p class="sub">Use at least 6 characters. You will stay signed in after changing it.</p>' +
+
+      (u.mustChangePassword
+        ? '<div class="notice amber">You are using a default or administrator-reset password. Please change it now.</div>'
+        : '') +
+
+      '<p class="error-box" id="acctError"></p>' +
+      '<p class="notice green" id="acctOk" style="display:none"></p>' +
+
+      '<div class="form-group"><label>Current password</label>' +
+        '<input type="password" id="acctCurrent" autocomplete="current-password"></div>' +
+      '<div class="form-group"><label>New password</label>' +
+        '<input type="password" id="acctNew" autocomplete="new-password"></div>' +
+      '<div class="form-group"><label>Confirm new password</label>' +
+        '<input type="password" id="acctConfirm" autocomplete="new-password"></div>' +
+
+      '<button class="btn primary" onclick="changeOwnPassword()">Update password</button>' +
+    '</div>';
+}
+
+function changeOwnPassword() {
+  var errBox = document.getElementById('acctError');
+  var okBox  = document.getElementById('acctOk');
+
+  errBox.style.display = 'none';
+  okBox.style.display  = 'none';
+
+  var current = document.getElementById('acctCurrent').value;
+  var next    = document.getElementById('acctNew').value;
+  var confirm = document.getElementById('acctConfirm').value;
+
+  if (hashPassword(current) !== currentUser.password) {
+    errBox.textContent = 'Your current password is incorrect.';
+    errBox.style.display = 'block';
+    return;
+  }
+  if (next.length < 6) {
+    errBox.textContent = 'The new password must be at least 6 characters.';
+    errBox.style.display = 'block';
+    return;
+  }
+  if (next !== confirm) {
+    errBox.textContent = 'The new passwords do not match.';
+    errBox.style.display = 'block';
+    return;
+  }
+
+  currentUser.password = hashPassword(next);
+  currentUser.mustChangePassword = false;
+
+  logAudit(currentUser.name, 'account.change_password', '@' + currentUser.username);
+  saveDB();
+
+  renderAccount();
+
+  var freshOk = document.getElementById('acctOk');
+  if (freshOk) {
+    freshOk.textContent = 'Your password has been updated.';
+    freshOk.style.display = 'block';
+  }
+}
+
+
+function renderSubjectsPage() {
+  var subs = currentUser.subjects || [];
+
+  var chips = subs.length
+    ? '<ul class="subject-list">' + subs.map(function (s) {
+        return '<li>' + esc(s) + '</li>';
+      }).join('') + '</ul>'
+    : '<div class="empty">No subjects assigned. Your stream determines your subject list.</div>';
+
+  main().innerHTML =
+    '<div class="card">' +
+      '<h3>My subjects</h3>' +
+      '<p class="sub">' +
+        (currentUser.stream
+          ? esc(streamLabel(currentUser.stream)) + ' · Grade ' + esc(currentUser.grade)
+          : 'General programme · Grade ' + esc(currentUser.grade || '—')) +
+      '</p>' +
+      chips +
+    '</div>';
+}
+
+
+
+function renderPlaceholder() {
+  var meta = PAGE_TITLES[currentPage] || ['Section', ''];
+  main().innerHTML =
+    '<div class="card">' +
+      '<h3>' + esc(meta[0]) + '</h3>' +
+      '<p class="sub">' + esc(meta[1]) + '</p>' +
+      '<div class="empty">This section is ready to be connected to your school data.</div>' +
+    '</div>';
+}
+
+function renderAnalytics()  { renderPlaceholder(); }
+function renderTeachers()   { renderPlaceholder(); }
+function renderGrades()     { renderPlaceholder(); }
+function renderAttendance() { renderPlaceholder(); }
+function renderAnnouncements() { renderPlaceholder(); }
+function renderSettings()   { renderPlaceholder(); }
+function renderBooks()      { renderPlaceholder(); }
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+
+  loadDB();
+
+  
+
+  var form = document.getElementById('authForm');
+  var loginId = document.getElementById('loginId');
+  var usernameEl = document.getElementById('username');
+  var gradeInput = document.getElementById('grade');
+  var streamSelect = document.getElementById('stream');
+  var passwordInput = document.getElementById('logginPassword');
+  var switchLink = document.getElementById('switchLink');
+
+
+  gradeInput.addEventListener('input', updateStreamField);
+  streamSelect.addEventListener('change', function () { renderSubjects(streamSelect.value); });
+
+
+  switchLink.addEventListener('click', function (e) {
+    e.preventDefault();
+    setMode(mode === 'signin' ? 'signup' : 'signin');
+  });
+
+
+  document.getElementById('modalBack').addEventListener('click', function (e) {
+    if (e.target === this) closeModal();
+  });
+
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeModal();
+  });
+
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    hideError();
+
+    var loginValue = loginId.value.trim();
+    var password   = passwordInput.value;
+
+
+    if (mode === 'signin') {
+
+      if (!loginValue) {
+        showError('Please enter your username or full name.');
+        loginId.focus();
+        return;
+      }
+      if (!password) {
+        showError('Please enter your password.');
+        passwordInput.focus();
+        return;
+      }
+
+      var user = findUserByLogin(loginValue);
+
+      if (!user) {
+        showError('No account found with those details.');
+        return;
+      }
+      if (!user.active) {
+        showError('This account has been disabled. Please contact an administrator.');
+        return;
+      }
+      if (user.password !== hashPassword(password)) {
+        showError('Incorrect password. Please try again.');
+        passwordInput.focus();
+        return;
+      }
+
+
+      logAudit(user.name, 'auth.signin', ROLE_LABEL[user.role]);
+      form.reset();
+      enterApp(user);
+      return;
+    }
+
+
+    var name = loginValue;
+    var username = usernameEl.value.trim().toLowerCase();
+    var grade = Number(gradeInput.value);
+
+    if (name.length < 2) {
+      showError('Please enter your full name.');
+      loginId.focus();
+      return;
+    }
+    if (!/^[a-z0-9._-]{3,20}$/.test(username)) {
+      showError('Username must be 3–20 characters: letters, numbers, dot, dash or underscore.');
+      usernameEl.focus();
+      return;
+    }
+    if (DB.users.some(function (u) { return u.username.toLowerCase() === username; })) {
+      showError('That username is already taken. Please choose another.');
+      usernameEl.focus();
+      return;
+    }
+    if (!password || password.length < 6) {
+      showError('Password must be at least 6 characters.');
+      passwordInput.focus();
+      return;
+    }
+    if (!gradeInput.value || grade < 1 || grade > 12) {
+      showError('Please enter a valid grade between 1 and 12.');
+      gradeInput.focus();
+      return;
+    }
+    if (grade >= 11 && !streamSelect.value) {
+      showError('Please select your stream (Natural or Social Science).');
+      streamSelect.focus();
+      return;
+    }
+
+    var stream = grade >= 11 ? streamSelect.value : null;
+
+    var newUser = {
+      id: uid('u'),
+      username: username,
+      name: name,
+      role: 'student',
+      password: hashPassword(password),
+      grade: grade,
+      stream: stream,
+      subjects: stream ? SUBJECTS[stream].slice() : [],
+      active: true,
+      mustChangePassword: false,
+      createdAt: new Date().toISOString(),
+      createdBy: 'self-registration'
+    };
+
+    DB.users.push(newUser);
+    logAudit(name, 'auth.signup', 'Student self-registration (@' + username + ')');
+    saveDB();
+
+    form.reset();
+    enterApp(newUser);
+  });
+
+});
+</script>
+</body>
+</html>
